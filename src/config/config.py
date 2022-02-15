@@ -10,7 +10,7 @@ class ProductionConfig(Config):
     password = '75ZuW#mY'
     database = 'yanyan-pro'
     DEBUG = False
-    SQLALCHEMY_DATABASE_URI = 'mysql://%s:%s@sh-cynosdbmysql-grp-l6mgd8ra.sql.tencentcdb.com:27501/%s?charset=utf8mb4' % (username, password, database)
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://%s:%s@sh-cynosdbmysql-grp-l6mgd8ra.sql.tencentcdb.com:27501/%s?charset=utf8mb4' % (username, password, database)
     SQLALCHEMY_ECHO = False
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     WTF_CSRF_ENABLED = False

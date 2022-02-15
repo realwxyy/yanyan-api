@@ -9,7 +9,7 @@ COPY . ./
 
 # 安装依赖
 RUN pip install -r requirements.txt
-RUN pip install Flask MySQLdb gunicorn
+RUN pip install Flask PyMySQL gunicorn
 
 # 启动 Web 服务
 # 这里我们使用了 gunicorn 作为 Server，1 个 worker 和 8 个线程
