@@ -17,3 +17,14 @@ def balance_list():
         return dict(code=0, list=balances)
     except Exception as e:
         return dict(code=-1, message='其他错误: ' + str(e))
+
+def save(param):
+    try:
+        param = util.format_fields(param, BalanceReSchema())
+        balance_schema = BalanceSchema()
+        balance = balance_schema.load(param, session=db.session)
+        res = balance.save().get_schema()
+        return dict(code=0, data=res)
+    except Exception as e:
+        return dict(code=-1, message='其他错误: ' + str(e))
+    
