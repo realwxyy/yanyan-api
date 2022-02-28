@@ -1,6 +1,7 @@
 from flask import Blueprint, make_response, jsonify, request
 from src.utils import util, resp
 from src.service import balance_service
+import decimal
 
 balance_controller = Blueprint('balance', __name__, url_prefix='/balance')
 
@@ -26,13 +27,26 @@ def save():
     @ author: wxyy
     '''
     param = util.pack_params(request)
-    valid = util.dict_not_empty(param, ['type', 'amount', 'balance'])
+    valid = util.dict_not_empty(param, ['type', 'amount'])
+    balance = 0
     if not valid.get('code') == 0:
-        return resp.resp_fail(message=valid.get('msg'))
+      return resp.resp_fail(message=valid.get('msg'))
+    last_res = balance_service.get_last()
+    if not last_res.get('code') == 0:
+      return resp.resp_fail(message=last_res.get('message'))
+    last_balance = last_res.get('data').get('balance')
+    last_balance = decimal.Decimal(last_balance if last_balance else 0)
+    type = param.get('type')
+    amount = param.get('amount')
+    if (type):
+      amount = decimal.Decimal(amount)
+    else:
+      amount = -decimal.Decimal(amount)
+    balance = last_balance + amount
+    param.update({ 'balance': balance })
     param = util.assign_post_fields(param)
     res = balance_service.save(param)
-    print(res)
     if not res.get('code') == 0:
-        return resp.resp_fail(message=res.get('message'))
+      return resp.resp_fail(message=res.get('message'))
     res.pop('code')
-    return resp.resp_succ(res, message='添加成功')
+    return resp.resp_succ(res.get('data'), message='添加成功')
