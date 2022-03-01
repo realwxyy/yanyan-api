@@ -1,3 +1,4 @@
+from sqlalchemy import func
 from src.model import Balance
 
 BALANCE_LIST = [
@@ -9,3 +10,5 @@ BALANCE_LIST = [
   Balance.update_date.label('updateDate'),
   Balance.is_delete.label('isDelete')
 ]
+
+BALANCE_EACH_TOTAL = [func.sum(Balance.amount).label('sum')]

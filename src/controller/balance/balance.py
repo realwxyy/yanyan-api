@@ -5,6 +5,13 @@ import decimal
 
 balance_controller = Blueprint('balance', __name__, url_prefix='/balance')
 
+@balance_controller.route('/get-balance', methods=['get'])
+def get_balance():
+  res = balance_service.get_last()
+  if not res.get('code') == 0:
+    return resp.resp_fail(message=res.get('message'))
+  res.pop('code')
+  return resp.resp_succ(res.get('data'), message='查询成功')
 
 @balance_controller.route('/get-balances', methods=['get'])
 def get_balances():
@@ -14,9 +21,13 @@ def get_balances():
   res.pop('code')
   return resp.resp_succ(res.get('list'), message='查询成功')
 
-@balance_controller.route('/get-balance', methods=['get'])
-def t1():
-  return 'welocome to /test/t1'
+@balance_controller.route('/get-each-total', methods=['get'])
+def get_each_total():
+  res = balance_service.get_each_total()
+  if not res.get('code') == 0:
+      return resp.resp_fail(message=res.get('message'))
+  res.pop('code')
+  return resp.resp_succ(res.get('data'), message='查询成功')
 
 @balance_controller.route('/save', methods=['post'])
 def save():
@@ -27,7 +38,7 @@ def save():
     @ author: wxyy
     '''
     param = util.pack_params(request)
-    valid = util.dict_not_empty(param, ['type', 'amount'])
+    valid = util.dict_not_empty(param, ['userId', 'type', 'amount'])
     balance = 0
     if not valid.get('code') == 0:
       return resp.resp_fail(message=valid.get('msg'))

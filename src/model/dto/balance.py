@@ -9,6 +9,7 @@ class Balance(db.Model):
     __tablename__ = 'balance'
     # 定义字段
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.Integer)
     type = db.Column(db.Integer)
     amount = db.Column(db.DECIMAL)
     balance = db.Column(db.DECIMAL)
@@ -31,6 +32,7 @@ class BalanceSchema(ModelSchema):
         # sqla_session = db.session
 
     id = fields.Number()
+    userId = fields.Number()
     type = fields.Number()
     amount = fields.Number()
     balance = fields.Number()
